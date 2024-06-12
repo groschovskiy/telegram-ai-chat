@@ -19,19 +19,24 @@ I'm also support Meta AI and Mistral AI models.\
 """)
     
 
+@bot.message_handler(commands=['web'])
+def web_handler(message):
+    bot.reply_to(message, "Access the full power of our application on your desktop! Visit https://gemini.google.com for a more convenient experience.")
+
+
 @bot.message_handler(commands=['help'])
-def open_help_page(message):
+def help_handler(message):
     bot.reply_to(message, "Explore the official Gemma models website to learn more about them and discover what questions you have. Open https://ai.google.dev/gemma website for more information.")
 
 
-@bot.message_handler(commands=['model'])
-def change_model(message):
-    bot.reply_to(message, "While I can only utilize the Google Gemma 7B-it model right now, there might be other ways I can assist you. The Google Gemma 7B-it is fantastic for understanding your questions and requests, but if your task requires a different approach,  let me know what you need and I'll see if there's another way I can be helpful.")
+@bot.message_handler(commands=['models'])
+def model_handler(message):
+    bot.reply_to(message, "You can send command /set <model> to change the model. For example, /set llama3-8b-8192 or /set mixtral-8x7b-32768")
 
 
-@bot.message_handler(commands=['web'])
-def change_model(message):
-    bot.reply_to(message, "Access the full power of our application on your desktop! Visit https://gemini.google.com for a more convenient experience.")
+@bot.message_handler(commands=['set'])
+def setup_handler(message):
+    rdb.set_ai_model(message.from_user.id, message.text.split(' ')[1])
 
 
 @bot.message_handler(func=lambda message: True)
@@ -54,7 +59,7 @@ bot.set_my_commands(
     commands=[
         telebot.types.BotCommand("web", "Open Gemini website"),
         telebot.types.BotCommand("help", "Gemma FAQ and help"),
-        telebot.types.BotCommand("model", "Change Gemma model"),
+        telebot.types.BotCommand("models", "List of available models"),
     ],
 )
 
