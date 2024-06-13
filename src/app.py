@@ -1,7 +1,7 @@
 import os
 import telebot
 from groq import Groq
-import rdb
+import ai
 
 bot = telebot.TeleBot(os.environ.get("TG_API_KEY"), parse_mode=None)
 
@@ -36,12 +36,12 @@ def model_handler(message):
 
 @bot.message_handler(commands=['set'])
 def setup_handler(message):
-    rdb.set_ai_model(message.from_user.id, message.text.split(' ')[1])
+    ai.select_model(message.from_user.id, message.text.split(' ')[1])
 
 
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
-    llm = rdb.get_ai_model(message.from_user.id)
+    llm = ai.receive_model(message.from_user.id)
 
     chat_completion = client.chat.completions.create(
         messages=[
